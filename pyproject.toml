@@ -1,0 +1,80 @@
+[project]
+name = "interswitch-python"
+version = "0.1.0"
+description = "Python SDK for Interswitch APIs to make requests easier"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Muiz Oyebowale", email = "oyebowaleabdulmuiz@gmail.com" }
+]
+keywords = ["interswitch", "payment", "verification", "bvn", "nin", "api", "sdk"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "types-requests>=2.31.0",
+]
+async = [
+    "httpx>=0.25.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/muizoyebowale/interswitch-python"
+Documentation = "https://github.com/muizoyebowale/interswitch-python#readme"
+Repository = "https://github.com/muizoyebowale/interswitch-python"
+Issues = "https://github.com/muizoyebowale/interswitch-python/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/interswitch"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--cov=src/interswitch",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "N", "W"]
+
+[tool.ruff.lint]
+select = [ "E", "W", "F", "I", "N", "UP", "B", "C4" ]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
