@@ -1,9 +1,6 @@
-"""
-Interswitch Python SDK.
+"""Interswitch Python SDK."""
 
-Python SDK for Interswitch APIs to make requests easier.
-"""
-
+from interswitch.async_client import AsyncInterswitchClient
 from interswitch.client import InterswitchClient
 from interswitch.config import Config
 from interswitch.exceptions import (
@@ -15,11 +12,15 @@ from interswitch.exceptions import (
     RateLimitError,
     ValidationError,
 )
+from interswitch.interswitch_types import APIResponse, ErrorResponse
 
 __version__ = "0.1.0"
 __all__ = [
     "InterswitchClient",
+    "AsyncInterswitchClient",
     "Config",
+    "APIResponse",
+    "ErrorResponse",
     # Exceptions
     "InterswitchError",
     "AuthenticationError",
