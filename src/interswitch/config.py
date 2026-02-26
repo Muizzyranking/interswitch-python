@@ -32,15 +32,16 @@ class Config:
     DJANGO_TOKEN_EXP = "INTERSWITCH_TOKEN_EXPIRY"
     DJANGO_REQUEST_TIMEOUT = "INTERSWITCH_REQUEST_TIMEOUT"
 
-    DEFAULT_BASE_URL = "https://api-marketplace-routing.k8.isw.la"
-    DEFAULT_TOKEN_URL = "https://passport-v2.k8.isw.la/passport/oauth/token"
+    # DEFAULT_BASE_URL = "https://api-marketplace-routing.k8.isw.la"
+    DEFAULT_BASE_URL = "https://api-marketplace-routing.k8.isw.la/marketplace-routing/api/v1"
+    DEFAULT_TOKEN_URL = "https://qa.interswitchng.com/passport/oauth/token"
     DEFAULT_TOKEN_EXPIRY = 1799
     DEFFAULT_REQUEST_TIMEOUT = 30
 
     def __init__(
         self,
-        client_id: str,
-        client_secret: str,
+        client_id: str | None = None,
+        client_secret: str | None = None,
         base_url: str | None = None,
         token_url: str | None = None,
         token_expiry: int | None = None,
@@ -62,7 +63,7 @@ class Config:
     def _check_django(self) -> bool:
         """Check if Django is available and configured."""
         try:
-            from django.conf import settings  # pyright: ignore[reportMissingImports]
+            from django.conf import settings  # type: ignore
 
             if settings.configured:
                 self._django_settings = settings
@@ -152,22 +153,27 @@ class Config:
 
     @property
     def token_expiry(self) -> int:
-        """Get token expiry time in seconds (currently fixed)."""
-        return int(
-            self._token_expiry
-            or self._get_from_django(self.DJANGO_TOKEN_EXP)
-            or self._get_from_env(self.ENV_TOKEN_EXP)
-            or self.DEFAULT_TOKEN_EXPIRY
-        )
+        if self._token_expiry is not None:
+            return int(self._token_expiry)
+        from_django = self._get_from_django(self.DJANGO_TOKEN_EXP)
+        if from_django is not None:
+            return int(from_django)
+        from_env = self._get_from_env(self.ENV_TOKEN_EXP)
+        if from_env is not None:
+            return int(from_env)
+        return self.DEFAULT_TOKEN_EXPIRY
 
     @property
     def request_timeout(self) -> int:
-        return int(
-            self._request_timeout
-            or self._get_from_django(self.DJANGO_REQUEST_TIMEOUT)
-            or self._get_from_env(self.ENV_REQUEST_TIMEOUT)
-            or self.DEFFAULT_REQUEST_TIMEOUT
-        )
+        if self._request_timeout is not None:
+            return int(self._request_timeout)
+        from_django = self._get_from_django(self.DJANGO_REQUEST_TIMEOUT)
+        if from_django is not None:
+            return int(from_django)
+        from_env = self._get_from_env(self.ENV_REQUEST_TIMEOUT)
+        if from_env is not None:
+            return int(from_env)
+        return self.DEFFAULT_REQUEST_TIMEOUT
 
     def is_configured(self) -> bool:
         """
