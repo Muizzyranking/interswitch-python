@@ -1,6 +1,6 @@
 # interswitch-python
 
-Python SDK for the [Interswitch Identity and Payments API](https://developer.interswitchgroup.com/).
+Python SDK for the [Interswitch Identity API](https://developer.interswitchgroup.com/).
 
 Supports Python 3.10+. Both sync and async clients. Zero required dependencies beyond `requests`.
 
