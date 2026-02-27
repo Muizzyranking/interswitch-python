@@ -9,6 +9,7 @@ from interswitch.config import Config
 from interswitch.exceptions import APIError, NetworkError, RateLimitError, ValidationError
 from interswitch.http_client.base import BaseHttpRequest, Methods
 from interswitch.interswitch_types import APIResponse
+from interswitch.permissions import check_api_actions
 
 logger = logging.getLogger("interswitch.http_client")
 
@@ -32,6 +33,7 @@ class SyncRequest(BaseHttpRequest):
         endpoint: str,
         data: Any = None,
         params: dict[str, Any] | None = None,
+        required_actions: str | list[str] | None = None,
     ) -> APIResponse:
         """Make an authenticated synchronous request to the API."""
         url = f"{self.base_url}{endpoint}"
@@ -40,6 +42,10 @@ class SyncRequest(BaseHttpRequest):
 
         try:
             headers = self.token_manager.get_auth_header()
+
+            if required_actions:
+                available_actions = self.token_manager.get_api_actions()
+                check_api_actions(required_actions, available_actions)
 
             start = time.monotonic()
 
@@ -168,11 +174,25 @@ class SyncRequest(BaseHttpRequest):
         endpoint: str,
         data: Any = None,
         params: dict[str, Any] | None = None,
+        required_actions: str | list[str] | None = None,
     ) -> APIResponse:
-        return self.request(Methods.GET, endpoint=endpoint, data=data, params=params)
+        return self.request(
+            Methods.GET,
+            endpoint=endpoint,
+            data=data,
+            params=params,
+            required_actions=required_actions,
+        )
 
-    def post(self, *, endpoint: str, data: Any = None) -> APIResponse:
-        return self.request(Methods.POST, endpoint=endpoint, data=data)
+    def post(
+        self, *, endpoint: str, data: Any = None, required_actions: str | list[str] | None = None
+    ) -> APIResponse:
+        return self.request(
+            Methods.POST,
+            endpoint=endpoint,
+            data=data,
+            required_actions=required_actions,
+        )
 
     def close(self) -> None:
         """Close the session to free up resources."""

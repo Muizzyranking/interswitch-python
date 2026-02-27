@@ -6,6 +6,7 @@ from interswitch.config import Config
 from interswitch.exceptions import APIError, NetworkError, RateLimitError, ValidationError
 from interswitch.http_client.base import BaseHttpRequest, Methods, logger
 from interswitch.interswitch_types import APIResponse
+from interswitch.permissions import check_api_actions
 
 try:
     import httpx
@@ -35,6 +36,7 @@ class AsyncRequest(BaseHttpRequest):
         endpoint: str,
         data: Any = None,
         params: dict[str, Any] | None = None,
+        required_actions: str | list[str] | None = None,
     ) -> APIResponse:
         """Make an authenticated asynchronous request to the API."""
         url = f"{self.base_url}{endpoint}"
@@ -43,6 +45,10 @@ class AsyncRequest(BaseHttpRequest):
 
         try:
             headers = await self.token_manager.get_auth_header()
+
+            if required_actions:
+                available_actions = self.token_manager.get_api_actions()
+                check_api_actions(required_actions, available_actions)
 
             start = time.monotonic()
 
@@ -151,11 +157,25 @@ class AsyncRequest(BaseHttpRequest):
         endpoint: str,
         data: Any = None,
         params: dict[str, Any] | None = None,
+        required_actions: str | list[str] | None = None,
     ) -> APIResponse:
-        return await self.request(Methods.GET, endpoint=endpoint, data=data, params=params)
+        return await self.request(
+            Methods.GET,
+            endpoint=endpoint,
+            data=data,
+            params=params,
+            required_actions=required_actions,
+        )
 
-    async def post(self, *, endpoint: str, data: Any = None) -> APIResponse:
-        return await self.request(Methods.POST, endpoint=endpoint, data=data)
+    async def post(
+        self, *, endpoint: str, data: Any = None, required_actions: str | list[str] | None = None
+    ) -> APIResponse:
+        return await self.request(
+            Methods.POST,
+            endpoint=endpoint,
+            data=data,
+            required_actions=required_actions,
+        )
 
     async def aclose(self) -> None:
         """Properly close the underlying httpx session connections."""
