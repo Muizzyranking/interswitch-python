@@ -8,9 +8,9 @@ def main():
     """Run demo examples."""
 
     # client_id = os.getenv("INTERSWITCH_CLIENT_ID")
-    client_id = "IKIA5C033FB09089D41239DFB784E163208462359948"
+    client_id = "IKIAFBF542E9A917B5C6EA8A8C36E209F3C76D5A2213"
     # client_secret = os.getenv("INTERSWITCH_CLIENT_SECRET")
-    client_secret = "CFE5A78D3E5C125AEB9D93A1B91C305276F0DF4D"
+    client_secret = "E02887530483717F017BBA4B3AE5E37CDDC6C475"
 
     if not client_id or not client_secret:
         print("❌ Error: Please set INTERSWITCH_CLIENT_ID and INTERSWITCH_CLIENT_SECRET")
@@ -32,6 +32,7 @@ def main():
     # print(f"   Marketplace user: {token_info['marketplace_user']}")
 
     # Demo 1: NIN Verification
+
     print("\n" + "=" * 60)
     print("Demo 1: NIN Verification")
     print("=" * 60)
@@ -42,7 +43,7 @@ def main():
     if nin:
         try:
             print(f"🔍 Verifying NIN: {nin}")
-            response = client.verify_nin(nin, first_name, last_name)
+            response = client.verify_nin(nin=nin, first_name=first_name, last_name=last_name)
 
             print("✅ NIN Verification Successful!")
             print(response)
@@ -54,6 +55,12 @@ def main():
         except InterswitchError as e:
             print(f"❌ Error: {e}")
 
+    print("\n📋 Token Information:")
+    token_info = client.get_token_info()
+    print(token_info)
+    print(f"   Token valid: {token_info['is_valid']}")
+
+    #
     # Demo 2: BVN Verification (Full)
     print("\n" + "=" * 60)
     print("Demo 2: BVN Full Details Verification")
@@ -63,7 +70,7 @@ def main():
     if bvn:
         try:
             print(f"🔍 Verifying BVN: {bvn}")
-            response = client.verify_bvn_full(bvn)
+            response = client.verify_bvn_full(bvn=bvn)
 
             print("✅ BVN Verification Successful!")
             print(response.data)
@@ -121,5 +128,6 @@ def main():
     print("=" * 60)
 
 
+#
 if __name__ == "__main__":
     main()

@@ -41,6 +41,9 @@ Documentation = "https://github.com/muizoyebowale/interswitch-python#readme"
 Repository = "https://github.com/muizoyebowale/interswitch-python"
 Issues = "https://github.com/muizoyebowale/interswitch-python/issues"
 
+[tool.setuptools.package-data]
+interswitch = ["py.typed"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
