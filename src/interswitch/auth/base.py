@@ -63,6 +63,9 @@ class BaseTokenManager:
         self.token_expiry = None
         self.token_data = None
 
+    def get_api_actions(self) -> list[str]:
+        return self.token_data.get("api-routing-actions", []) if self.token_data else []
+
     def get_token_info(self) -> dict[str, Any]:
         """Get information about the current token."""
         if not self.token_data:
@@ -74,7 +77,7 @@ class BaseTokenManager:
             "client_name": self.token_data.get("client_name"),
             "marketplace_user": self.token_data.get("marketplace_user"),
             "scope": self.token_data.get("scope"),
-            "api_actions": self.token_data.get("api-routing-actions", []),
+            "api_actions": self.get_api_actions(),
         }
 
     def __repr__(self) -> str:
