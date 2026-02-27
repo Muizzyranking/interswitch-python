@@ -4,7 +4,7 @@ All methods are available on both `InterswitchClient` (sync) and `AsyncInterswit
 
 Every method returns `APIResponse` on success or raises an exception. See [Error Handling](02-error-handling.md).
 
-`required_scope` is what the SDK checks against your token's `api_actions` before making the request. If the scope is missing, `InsufficientScopeError` is raised immediately.
+`required_actions` is what the SDK checks against your token's `api_actions` before making the request. If the action is missing, `InsufficientActionsError` is raised immediately.
 
 ---
 
@@ -28,7 +28,7 @@ response = client.verify_nin(
 | `first_name` | `str` | Yes |
 | `last_name` | `str` | Yes |
 
-Required scope: `VerifyMeNin`
+Required API action(s): `VerifyMeNin`
 
 ---
 
@@ -44,7 +44,7 @@ response = client.verify_nin_full(nin="1234567890123456")
 |---|---|---|
 | `nin` | `str` | Yes — 16-digit virtual NIN |
 
-Required scope: `UVNin`
+Required API action(s): `UVNin`
 
 ---
 
@@ -66,7 +66,7 @@ response = client.verify_bvn_boolean(
 | `first_name` | `str` | Yes |
 | `last_name` | `str` | Yes |
 
-Required scope: `VerifyMeBvn`
+Required API action(s): `VerifyMeBvn`
 
 ---
 
@@ -82,7 +82,7 @@ response = client.verify_bvn_full(bvn="12345678901")
 |---|---|---|
 | `bvn` | `str` | Yes |
 
-Required scope: `UVBvn`
+Required API action(s): `UVBvn`
 
 ---
 
@@ -102,7 +102,7 @@ response = client.verify_bank_account(
 | `account_number` | `str` | Yes |
 | `bank_code` | `str` | Yes |
 
-Required scope: `UVBankVerification`
+Required API action(s): `UVBankVerification`
 
 ---
 
@@ -118,7 +118,7 @@ response = client.verify_tin(tin="08120451-1001")
 |---|---|---|
 | `tin` | `str` | Yes |
 
-Required scope: `VerifyMeTin`
+Required API action(s): `VerifyMeTin`
 
 ---
 
@@ -134,7 +134,7 @@ response = client.verify_drivers_license(license_id="AAA00000AA00")
 |---|---|---|
 | `license_id` | `str` | Yes |
 
-Required scope: `UVDriverLicense` **or** `MonoDriverLicense` — either is sufficient.
+Required API action(s): `UVDriverLicense` **or** `MonoDriverLicense` — either is sufficient.
 
 ---
 
@@ -156,7 +156,7 @@ response = client.verify_intl_passport(
 | `last_name` | `str` | Yes |
 | `date_of_birth` | `str` | Yes — format: `DD/MM/YYYY` |
 
-Required scope: `MonoIntlPassport`
+Required API action(s): `MonoIntlPassport`
 
 ---
 
@@ -168,7 +168,7 @@ Retrieve the list of supported banks.
 response = client.get_bank_list()
 ```
 
-No scope restriction.
+No action restriction.
 
 ---
 
@@ -186,7 +186,7 @@ response = client.verify_domestic_pep(full_name="John Michael Doe")
 |---|---|---|
 | `full_name` | `str` | Yes |
 
-Required scope: `UVAmlDomestic`
+Required API action(s): `UVAmlDomestic`
 
 ---
 
@@ -204,7 +204,7 @@ response = client.verify_global_aml(query="John Doe", entity_type="Person")
 | `query` | `str` | Yes | — |
 | `entity_type` | `"Business"` \| `"Person"` | No | `"Business"` |
 
-Required scope: `UVAmlGlobal`
+Required API action(s): `UVAmlGlobal`
 
 ---
 
@@ -224,7 +224,7 @@ response = client.compare_faces(
 | `image1_url` | `str` | Yes |
 | `image2_url` | `str` | Yes |
 
-Required scope: `UVFaceComparison`
+Required API action(s): `UVFaceComparison`
 
 ---
 
@@ -260,7 +260,7 @@ response = client.submit_physical_address(
 | `city` | `str` | Yes |
 | `applicant` | `dict` | Yes — `firstname`, `lastname`, `phone`, `dob`, `gender` |
 
-Required scope: `VerifyMeAddress`
+Required API action(s): `VerifyMeAddress`
 
 ---
 
@@ -276,7 +276,7 @@ response = client.get_physical_address(reference="ref-001")
 |---|---|---|
 | `reference` | `str` | Yes — the `customerReference` from `submit_physical_address` |
 
-Required scope: `VerifyMeAddress`
+Required API action(s): `VerifyMeAddress`
 
 ---
 
@@ -296,7 +296,7 @@ response = client.generate_safetoken(token_id="user-identifier")
 |---|---|---|
 | `token_id` | `str` | Yes — your internal user identifier |
 
-Required scope: `VerveSoftTokenGen`
+Required API action(s): `VerveSoftTokenGen`
 
 ---
 
@@ -318,7 +318,7 @@ response = client.send_safetoken(
 | `email` | `str` | Yes |
 | `mobile_no` | `str` | Yes |
 
-Required scope: `VerveSoftTokenGen` **or** `VerveSoftTokenGenSms`
+Required API action(s): `VerveSoftTokenGen` **or** `VerveSoftTokenGenSms`
 
 ---
 
@@ -336,7 +336,7 @@ response = client.verify_safetoken(token_id="user-identifier", otp="123456")
 | `token_id` | `str` | Yes |
 | `otp` | `str` | Yes |
 
-Required scope: `VerveSoftTokenGen`
+Required API action(s): `VerveSoftTokenGen`
 
 ---
 
@@ -355,7 +355,7 @@ response = client.lookup_cac(company_name="Acme")
 |---|---|---|
 | `company_name` | `str` | Yes |
 
-Required scope: `MonoCac`
+Required API action(s): `MonoCac`
 
 ---
 
@@ -371,7 +371,7 @@ response = client.lookup_cac_directors(company_id="3369190")
 |---|---|---|
 | `company_id` | `str` | Yes — `id` from `lookup_cac` |
 
-Required scope: `MonoCac`
+Required API action(s): `MonoCac`
 
 ---
 
@@ -387,7 +387,7 @@ response = client.lookup_cac_secretary(company_id="3369190")
 |---|---|---|
 | `company_id` | `str` | Yes |
 
-Required scope: `MonoCac`
+Required API action(s): `MonoCac`
 
 ---
 
@@ -403,7 +403,7 @@ response = client.lookup_cac_shareholders(company_id="3369190")
 |---|---|---|
 | `company_id` | `str` | Yes |
 
-Required scope: `MonoCac`
+Required API action(s): `MonoCac`
 
 ---
 
@@ -419,7 +419,7 @@ response = client.initiate_bvn_accounts_lookup(bvn="12345678901")
 # response.data["methods"] — available OTP delivery methods
 ```
 
-Required scope: `MonoBvnAccounts`
+Required API action(s): `MonoBvnAccounts`
 
 ---
 
@@ -439,7 +439,7 @@ response = client.request_bvn_accounts_otp(
 | `method` | `"email"` \| `"sms"` | Yes | — |
 | `phone_number` | `str` | No | `""` |
 
-Required scope: `MonoBvnAccounts`
+Required API action(s): `MonoBvnAccounts`
 
 ---
 
@@ -453,7 +453,7 @@ response = client.fetch_bvn_accounts_details(
 # response.data — list of linked bank accounts
 ```
 
-Required scope: `MonoBvnAccounts`
+Required API action(s): `MonoBvnAccounts`
 
 ---
 
@@ -465,7 +465,7 @@ Check credit history linked to a BVN.
 response = client.lookup_credit_history(bvn="12345678901")
 ```
 
-Required scope: `MonoCreditHistory`
+Required API action(s): `MonoCreditHistory`
 
 ---
 
@@ -480,7 +480,7 @@ response = client.initiate_bvn_igree(bvn="12345678901")
 # response.data["session_id"]
 ```
 
-Required scope: `MonoBvnIGree`
+Required API action(s): `MonoBvnIGree`
 
 ---
 
@@ -494,7 +494,7 @@ response = client.request_bvn_igree_otp(
 )
 ```
 
-Required scope: `MonoBvnIGree`
+Required API action(s): `MonoBvnIGree`
 
 ---
 
@@ -507,7 +507,7 @@ response = client.fetch_bvn_igree_details(
 )
 ```
 
-Required scope: `MonoBvnIGree`
+Required API action(s): `MonoBvnIGree`
 
 ---
 
@@ -520,7 +520,7 @@ response = client.get_vas_billers()
 # response.data — list of biller categories
 ```
 
-Required scope: `VasBills`
+Required API action(s): `VasBills`
 
 ---
 
@@ -531,7 +531,7 @@ response = client.get_vas_payment_item(biller_id="520")
 # response.data — list of payment items for the biller
 ```
 
-Required scope: `VasBills`
+Required API action(s): `VasBills`
 
 ---
 
@@ -544,7 +544,7 @@ response = client.validate_vas_customer(
 )
 ```
 
-Required scope: `VasBills`
+Required API action(s): `VasBills`
 
 ---
 
@@ -566,7 +566,7 @@ response = client.pay_vas(
 | `reference` | `str` | Yes — must be unique per transaction |
 | `payment_code` | `str` | Yes |
 
-Required scope: `VasBills`
+Required API action(s): `VasBills`
 
 ---
 
@@ -576,7 +576,7 @@ Required scope: `VasBills`
 response = client.get_vas_transactions(request_reference="your-unique-reference")
 ```
 
-Required scope: `VasBills`
+Required API action(s): `VasBills`
 
 ---
 

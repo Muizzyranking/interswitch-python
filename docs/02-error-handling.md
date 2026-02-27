@@ -15,7 +15,7 @@ print(response.data)  # safe — if we got here, it worked
 
 ```
 Exception
-└── InsufficientScopeError          # project not configured for this API
+└── InsufficientActionsError          # project not configured for this API
 
 InterswitchError (base)
 ├── AuthenticationError             # token fetch failed / bad credentials
@@ -26,32 +26,32 @@ InterswitchError (base)
 └── ConfigurationError              # missing credentials or bad config
 ```
 
-`InsufficientScopeError` sits outside `InterswitchError` because it is a configuration problem, not an API error.
+`InsufficientActionsError` sits outside `InterswitchError` because it is a configuration problem, not an API error.
 
 ---
 
-## InsufficientScopeError
+## InsufficientActionsError
 
-Raised when your token does not include the scope required to call a method. The check happens after the token is fetched — so it works correctly on the first call.
+Raised when your token does not include the actions required to call a method. The check happens after the token is fetched — so it works correctly on the first call.
 
 ```python
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 
 try:
     response = client.lookup_cac(company_name="Acme")
-except InsufficientScopeError as e:
+except InsufficientActionsError as e:
     print(e.message)
     # "Your token does not have permission for this API.
     #  Required: 'MonoCac'. Go to the Interswitch Marketplace,
     #  open your project, and enable the missing API product."
 
-    print(e.required_scope)      # ['MonoCac']
+    print(e.required_actions)      # ['MonoCac']
     print(e.available_actions)   # what your token actually has
 ```
 
-**Fix:** Go to the Interswitch Marketplace, open your project, and enable the API product that corresponds to the required scope. Re-generate your credentials or wait for the current token to expire.
+**Fix:** Go to the Interswitch Marketplace, open your project, and enable the API product that corresponds to the required actions. Re-generate your credentials or wait for the current token to expire.
 
-Every method documents its required scope in the [API Reference](05-api-reference.md). You can also check what your current token has access to:
+Every method documents its required actions in the [API Reference](05-api-reference.md). You can also check what your current token has access to:
 
 ```python
 info = client.get_token_info()
@@ -167,7 +167,7 @@ except ConfigurationError as e:
 ## Recommended catch order
 
 ```python
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from interswitch.exceptions import (
     AuthenticationError,
     ValidationError,
@@ -180,9 +180,9 @@ from interswitch.exceptions import (
 try:
     response = client.verify_nin(...)
 
-except InsufficientScopeError as e:
+except InsufficientActionsError as e:
     # Project config problem — fix in the Marketplace
-    log.error("API not enabled: %s", e.required_scope)
+    log.error("API not enabled: %s", e.required_actions)
 
 except AuthenticationError as e:
     # Credentials problem — check config

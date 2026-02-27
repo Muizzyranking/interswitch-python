@@ -133,4 +133,4 @@ print(info["marketplace_user"]) # your Marketplace email
 print(info["api_actions"])     # list of APIs your token can access
 ```
 
-`api_actions` is what the SDK checks for scope before every call. If a method fails with `InsufficientScopeError`, compare the required scope in the error against this list to see what is missing.
+`api_actions` is what the SDK checks for scope before every call. If a method fails with `InsufficientActionsError`, compare the required scope in the error against this list to see what is missing.

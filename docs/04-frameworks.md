@@ -32,7 +32,7 @@ Use it in your views:
 # myapp/views.py
 from django.http import JsonResponse
 from interswitch.exceptions import APIError, ValidationError
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from myapp.services.interswitch import client
 
 
@@ -55,7 +55,7 @@ def verify_nin_view(request):
     except APIError as e:
         return JsonResponse({"error": e.message}, status=422)
 
-    except InsufficientScopeError as e:
+    except InsufficientActionsError as e:
         return JsonResponse({"error": "API not configured"}, status=503)
 ```
 
@@ -159,7 +159,7 @@ def get_interswitch_client() -> InterswitchClient:
 from fastapi import APIRouter, Depends, HTTPException
 from interswitch import InterswitchClient
 from interswitch.exceptions import APIError, ValidationError
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from app.dependencies import get_interswitch_client
 
 router = APIRouter()
@@ -179,7 +179,7 @@ def verify_nin(
         raise HTTPException(status_code=400, detail=e.message)
     except APIError as e:
         raise HTTPException(status_code=422, detail=e.message)
-    except InsufficientScopeError as e:
+    except InsufficientActionsError as e:
         raise HTTPException(status_code=503, detail=e.message)
 ```
 
@@ -223,7 +223,7 @@ def get_interswitch_client() -> AsyncInterswitchClient:
 from fastapi import APIRouter, Depends, HTTPException
 from interswitch import AsyncInterswitchClient
 from interswitch.exceptions import APIError, ValidationError
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from app.dependencies import get_interswitch_client
 
 router = APIRouter()
@@ -243,7 +243,7 @@ async def verify_nin(
         raise HTTPException(status_code=400, detail=e.message)
     except APIError as e:
         raise HTTPException(status_code=422, detail=e.message)
-    except InsufficientScopeError as e:
+    except InsufficientActionsError as e:
         raise HTTPException(status_code=503, detail=e.message)
 ```
 
@@ -304,7 +304,7 @@ def create_app():
 # app/routes/verification.py
 from flask import Blueprint, request, jsonify
 from interswitch.exceptions import APIError, ValidationError
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from app.extensions import interswitch
 
 bp = Blueprint("verification", __name__)
@@ -324,7 +324,7 @@ def verify_nin():
         return jsonify({"error": e.message}), 400
     except APIError as e:
         return jsonify({"error": e.message}), 422
-    except InsufficientScopeError as e:
+    except InsufficientActionsError as e:
         return jsonify({"error": e.message}), 503
 ```
 

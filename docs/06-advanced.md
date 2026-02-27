@@ -80,7 +80,7 @@ from interswitch.exceptions import NetworkError
 
 
 class RetryingHttpClient(SyncRequest):
-    def request(self, method, *, endpoint, data=None, params=None, required_scope=None):
+    def request(self, method, *, endpoint, data=None, params=None, required_actions=None):
         last_error = None
         for attempt in range(3):
             try:
@@ -89,7 +89,7 @@ class RetryingHttpClient(SyncRequest):
                     endpoint=endpoint,
                     data=data,
                     params=params,
-                    required_scope=required_scope,
+                    required_actions=required_actions,
                 )
             except NetworkError as e:
                 last_error = e

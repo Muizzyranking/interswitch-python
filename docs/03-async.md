@@ -74,7 +74,7 @@ The token is shared across all concurrent calls. The first call fetches it; the 
 Identical to sync — same exceptions, same catch order. See [Error Handling](02-error-handling.md).
 
 ```python
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from interswitch.exceptions import APIError, NetworkError
 
 async with AsyncInterswitchClient() as client:
@@ -82,7 +82,7 @@ async with AsyncInterswitchClient() as client:
         response = await client.verify_nin(
             nin="12345678901", first_name="Muiz", last_name="Yusuf"
         )
-    except InsufficientScopeError as e:
+    except InsufficientActionsError as e:
         print(e.message)
     except APIError as e:
         print(e.message)

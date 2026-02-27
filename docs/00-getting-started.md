@@ -4,7 +4,7 @@
 
 Before anything else, go to [developer.interswitchgroup.com](https://developer.interswitchgroup.com/) and create a project. When creating the project, select the specific APIs you need — NIN, BVN, CAC, VAS, etc.
 
-Your Client ID and Client Secret are scoped to the APIs you selected. If you try to call an API your project does not include, the SDK raises `InsufficientScopeError` before making any network request (more on this in [Error Handling](02-error-handling.md)).
+Your Client ID and Client Secret are scoped to the APIs you selected. If you try to call an API your project does not include, the SDK raises `InsufficientActionsError` before making any network request (more on this in [Error Handling](02-error-handling.md)).
 
 Once you have your credentials, start in the QA environment. All default URLs point to QA. Move to production by setting `base_url` and `token_url` when you are ready.
 
@@ -104,7 +104,7 @@ If the call fails for any reason, an exception is raised — the response is nev
 
 ```python
 from interswitch import InterswitchClient
-from interswitch.permissions import InsufficientScopeError
+from interswitch.permissions import InsufficientActionsError
 from interswitch.exceptions import (
     APIError,
     AuthenticationError,
@@ -123,7 +123,7 @@ try:
     )
     print(response.data)
 
-except InsufficientScopeError as e:
+except InsufficientActionsError as e:
     # Your project does not have this API enabled.
     # Go to the Marketplace and add it.
     print(e.message)
@@ -166,6 +166,6 @@ The SDK logs under `interswitch.auth` and `interswitch.http`. See [Logging](07-l
 ## Next steps
 
 - [Configuration](01-configuration.md) — all config options, environment variables, Django settings
-- [Error Handling](02-error-handling.md) — full exception reference and scope/permissions
+- [Error Handling](02-error-handling.md) — full exception reference and actions/permissions
 - [Async Usage](03-async.md) — `AsyncInterswitchClient` and framework integration
 - [API Reference](05-api-reference.md) — every available method
